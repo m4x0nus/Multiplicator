@@ -1,4 +1,4 @@
-import click, os, yaml
+import click, os, shutil, yaml
 
 @click.command()
 @click.option("-c", "--config", default="config.yaml", help="Config yaml file path.", type=click.Path(exists=True))
@@ -9,6 +9,20 @@ def main(config, dry_try):
     is_valid(config_file)
     if dry_try:
         return
+    try:
+        shutil.rmtree('out_backup')
+    except FileNotFoundError:
+        pass
+    os.makedirs(os.path.dirname("\out_backup"), exist_ok=True)
+    shutil.copytree("out", "out_backup")
+    try:
+        pass #Main part
+    except Exception as exception:
+        shutil.rmtree('out')
+        os.rename('out_backup', 'out')
+        print(exception)
+    else:
+        shutil.rmtree('out_backup')
 
 def is_valid(config_file):
     for skeleton in config_file["skeletons"]:
