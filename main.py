@@ -1,4 +1,4 @@
-import click, os, shutil, yaml
+import click, os, shutil, glob, yaml, jinja2
 
 @click.command()
 @click.option("-c", "--config", default="config.yaml", help="Config yaml file path.", type=click.Path(exists=True))
@@ -13,6 +13,14 @@ def main(config, dry_run):
     try:
         for out in config_file["out"]:
             shutil.copytree(os.path.join("skeletons", out["skeleton"]), os.path.join("out", list(out)[0]))
+            vars = out["var"]
+            vars["section_name"] = list(out)[0]
+            for template_path in glob.glob(os.path.join("out", list(out)[0], "**", "*.template"), recursive=True):
+                template = jinja2.Template(open(template_path).read())
+                f = open(os.path.splitext(template_path)[0], "w")
+                f.write(template.render(vars))
+                f.close()
+                os.remove(template_path)
     except Exception as exception:
         load_backup()
         print(exception)
@@ -21,11 +29,15 @@ def main(config, dry_run):
 
 def make_backup():
     try:
-        shutil.rmtree("out_backup")
+        try:
+            shutil.rmtree("out_backup")
+        except FileNotFoundError:
+            pass
+        os.rename(os.path.join("", "out"), os.path.join("", "out_backup"))
     except FileNotFoundError:
-        pass
-    os.rename(os.path.join("", "out"), os.path.join("", "out_backup"))
-    os.makedirs("out", exist_ok=True)
+        os.makedirs("out", exist_ok=True)
+    else:
+        os.makedirs("out", exist_ok=True)
 
 def load_backup():
     shutil.rmtree("out")
