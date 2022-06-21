@@ -46,7 +46,10 @@ def load_backup():
     os.rename("out_backup", "out")
 
 def erase_backup():
-    shutil.rmtree("out_backup")
+    try:
+        shutil.rmtree("out_backup")
+    except FileNotFoundError:
+        pass
 
 def is_valid(config_file):
     exceptions = ""
