@@ -1,4 +1,4 @@
-import click, os, shutil, glob, yaml, jinja2
+import click, os, sys, shutil, glob, yaml, jinja2
 
 @click.command()
 @click.option("-c", "--config", default="config.yaml", help="Config yaml file path.", type=click.Path(exists=True))
@@ -47,12 +47,15 @@ def erase_backup():
     shutil.rmtree("out_backup")
 
 def is_valid(config_file):
+    exceptions = ""
     for skeleton in config_file["skeletons"]:
         if not os.path.isdir(os.path.join("skeletons", skeleton)):
-            raise Exception('Skeleton path "' + os.path.join("skeletons", skeleton) + '" is not valid')
+            exceptions += 'Skeleton path "' + os.path.join("skeletons", skeleton) + '" is not valid \n'
     for i in config_file["out"]:
         if not i["skeleton"] in config_file["skeletons"]:
-            raise Exception('Skeleton path "' + skeleton + '" is not in skeletons list')
+            exceptions += 'Skeleton path "' + skeleton + '" is not in skeletons list'
+    if exceptions != "":
+        sys.exit(exceptions)
 
 if __name__ == "__main__":
     main()
