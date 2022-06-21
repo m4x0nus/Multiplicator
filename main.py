@@ -12,10 +12,10 @@ def main(config, dry_run):
     make_backup()
     try:
         for out in config_file["out"]:
-            shutil.copytree(os.path.join("skeletons", out["skeleton"]), os.path.join("out", list(out)[0]))
+            shutil.copytree(os.path.join("skeletons", out["skeleton"]), os.path.join("out", str(list(out)[0])))
             vars = out["var"]
             vars["section_name"] = list(out)[0]
-            for template_path in glob.glob(os.path.join("out", list(out)[0], "**", "*.template"), recursive=True):
+            for template_path in glob.glob(os.path.join("out", str(list(out)[0]), "**", "*.template"), recursive=True):
                 template = jinja2.Template(open(template_path).read())
                 f = open(os.path.splitext(template_path)[0], "w")
                 f.write(template.render(vars))
