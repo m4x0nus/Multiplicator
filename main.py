@@ -13,7 +13,8 @@ def main(config, dry_run):
     try:
         for out in config_file["out"]:
             shutil.copytree(os.path.join("skeletons", out["skeleton"]), os.path.join("out", str(list(out)[0])))
-            vars = out["var"]
+            if "var" in out:
+                vars = out["var"]
             vars["section_name"] = list(out)[0]
             for template_path in glob.glob(os.path.join("out", str(list(out)[0]), "**", "*.template"), recursive=True):
                 template = jinja2.Template(open(template_path).read())
