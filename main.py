@@ -17,7 +17,7 @@ def main(config, dry_run):
             if "var" in out:
                 vars = out["var"]
             vars["section_name"] = section_name
-            for template_path in glob.glob(os.path.join("out", , "**", "*.template"), recursive=True):
+            for template_path in glob.glob(os.path.join("out", section_name, "**", "*.template"), recursive=True):
                 template = jinja2.Template(open(template_path).read())
                 f = open(os.path.splitext(template_path)[0], "w")
                 f.write(template.render(vars))
