@@ -32,7 +32,7 @@ def main(config, dry_run):
                 f.close()
                 os.remove(template_path)
     except Exception as exception:
-        load_backup()
+        restore_backup()
         print(exception)
     else:
         erase_backup()
@@ -49,7 +49,7 @@ def make_backup():
     else:
         os.makedirs("out", exist_ok=True)
 
-def load_backup():
+def restore_backup():
     shutil.rmtree("out")
     os.rename("out_backup", "out")
 
