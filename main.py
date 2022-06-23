@@ -15,9 +15,15 @@ def main(config, dry_run):
             section_name = str(list(out)[0])
             shutil.copytree(os.path.join("skeletons", out["skeleton"]), os.path.join("out", section_name))
             if "var" in out:
-                vars = out["var"]
+                if "var" in config_file:
+                    vars = {**config_file["var"], **out["var"]}
+                else:
+                    vars = out["var"]
             else:
-                vars = {}
+                if "var" in config_file:
+                    vars = config_file["var"]
+                else:
+                    vars = {}
             vars["section_name"] = section_name
             for template_path in glob.glob(os.path.join("out", section_name, "**", "*.template"), recursive=True):
                 template = jinja2.Template(open(template_path).read())
