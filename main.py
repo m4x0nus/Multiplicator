@@ -11,24 +11,24 @@ def main(config, dry_run):
         return
     make_backup()
     try:
-        for out in config_file["out"]:
-            section_name = str(list(out)[0])
-            shutil.copytree(os.path.join("skeletons", out["skeleton"]), os.path.join("out", section_name))
-            if "var" in out:
+        for section in config_file["out"]:
+            section_name = str(list(section)[0])
+            shutil.copytree(os.path.join("skeletons", section["skeleton"]), os.path.join("out", section_name))
+            if "var" in section:
                 if "var" in config_file:
-                    vars = {**config_file["var"], **out["var"]}
+                    var = {**config_file["var"], **section["var"]}
                 else:
-                    vars = out["var"]
+                    var = section["var"]
             else:
                 if "var" in config_file:
-                    vars = config_file["var"]
+                    var = config_file["var"]
                 else:
-                    vars = {}
-            vars["section_name"] = section_name
+                    var = {}
+            var["section_name"] = section_name
             for template_path in glob.glob(os.path.join("out", section_name, "**", "*.template"), recursive=True):
                 template = jinja2.Template(open(template_path).read())
                 f = open(os.path.splitext(template_path)[0], "w")
-                f.write(template.render(vars))
+                f.write(template.render(var))
                 f.close()
                 os.remove(template_path)
     except Exception as exception:
@@ -64,8 +64,8 @@ def is_valid(config_file):
     for skeleton in config_file["skeletons"]:
         if not os.path.isdir(os.path.join("skeletons", skeleton)):
             exceptions += 'Skeleton path "' + os.path.join("skeletons", skeleton) + '" is not valid \n'
-    for i in config_file["out"]:
-        if not i["skeleton"] in config_file["skeletons"]:
+    for section in config_file["out"]:
+        if not section["skeleton"] in config_file["skeletons"]:
             exceptions += 'Skeleton path "' + skeleton + '" is not in skeletons list'
     if exceptions != "":
         sys.exit(exceptions)
