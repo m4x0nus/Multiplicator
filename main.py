@@ -1,10 +1,27 @@
 import click, os, sys, shutil, glob, yaml, jinja2
 
-@click.command()
+@click.group(invoke_without_command=True)
+@click.pass_context
+def cli(ctx):
+    if ctx.invoked_subcommand is None:
+        echo()
+
+@cli.command(name = 'print')
+def echo():
+    if os.path.isdir("skeletons"):
+        listdir = os.listdir("skeletons")
+        if listdir != []:
+            for line in listdir:
+                click.echo(line)
+        else:
+            click.echo("No tags avaliable")
+    else:
+        click.echo("No tags avaliable")
+
+@cli.command()
 @click.option("-c", "--config", default="config.yaml", help="Config yaml file path.", type=click.Path(exists=True))
 @click.option("--dry-run", is_flag=True, help="Just check the validity of the config.")
-
-def main(config, dry_run):
+def update(config, dry_run):
     config_file = yaml.full_load(open(config, "r"))
     is_valid(config_file)
     if dry_run:
@@ -33,7 +50,7 @@ def main(config, dry_run):
                 os.remove(template_path)
     except Exception as exception:
         restore_backup()
-        print(exception)
+        click.echo(exception)
     else:
         erase_backup()
 
@@ -71,4 +88,4 @@ def is_valid(config_file):
         sys.exit(exceptions)
 
 if __name__ == "__main__":
-    main()
+    cli()
