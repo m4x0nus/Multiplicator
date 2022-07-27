@@ -8,8 +8,8 @@ def cli(ctx):
 
 @cli.command(name = 'print')
 def echo():
-    if os.path.isdir("skeletons"):
-        listdir = os.listdir("skeletons")
+    if os.path.isdir("out"):
+        listdir = os.listdir("out")
         if listdir != []:
             for line in listdir:
                 click.echo(line)
