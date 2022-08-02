@@ -14,9 +14,9 @@ def echo():
             for line in listdir:
                 click.echo(line)
         else:
-            click.echo("No tags avaliable")
+            click.echo("No tags available")
     else:
-        click.echo("No tags avaliable")
+        click.echo("No tags available")
 
 @cli.command()
 @click.option("-c", "--config", default="config.yaml", help="Config yaml file path.", type=click.Path(exists=True))
