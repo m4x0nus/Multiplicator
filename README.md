@@ -6,9 +6,9 @@ The classic usecase is to build a dozen of Dockerfiles for the different version
 ## TL;DR - a working sample
 File structure:
 ```
-skeletons/php/Dockerfile.template
-main.py
-config.yaml
+┌skeletons/php/Dockerfile.template
+├main.py
+└config.yaml
 ```
 
 
@@ -61,11 +61,11 @@ RUN pecl install xdebug-{{XDEBUG_VERSION}} && docker-php-ext-enable xdebug
 
 Now you are ready to run `python3 main.py update` to get 4 different Dockerfiles:
 ```
-out/
-    php-8.0/Dockerfile
-    php-8.0-with-xdebug/Dockerfile
-    php-8.1/Dockerfile
-    php-8.1-with-xdebug/Dockerfile
+out
+├ php-8.0/Dockerfile
+├ php-8.0-with-xdebug/Dockerfile
+├ php-8.1/Dockerfile
+└ php-8.1-with-xdebug/Dockerfile
 ```
 
 Need more variations?
