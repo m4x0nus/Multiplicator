@@ -87,10 +87,12 @@ python3 main.py update
 It takes no arguments as by default it uses **config.yaml** from the current directory as a config file.
 
 But the `update` command still has some aux options that are listed below:
-```
--c, --config PATH  Config yaml file path.
---dry-run          Just check the validity of the config.
-```
+
+| Short | Long        | Parameter | Description                           |
+| ----- | ----------- | --------- | ------------------------------------- |
+| -c    | --config    | PATH      | Config yaml file path                 |
+| -d    | --directory | PATH      | Working directory path                |
+|       | --dry-run   |           | Just check the validity of the config |
 
 
 
@@ -188,6 +190,12 @@ In case you need to save the generated directory after the respective section wa
 No tags available
 >
 ```
+
+`print` command has the following aux options:
+
+| Short | Long        | Parameter | Description                           |
+| ----- | ----------- | --------- | ------------------------------------- |
+| -d    | --directory | PATH      | Working directory path                |
 
 ## License
 This work is provided under the MIT License. See the included LICENSE file.

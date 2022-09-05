@@ -6,8 +6,11 @@ def cli(ctx):
     if ctx.invoked_subcommand is None:
         echo()
 
-@cli.command(name = 'print')
-def echo():
+@cli.command(name='print')
+@click.option("-d", "--directory", default=".", help="Path to the working directory", type=click.Path(exists=True))
+def echo(directory):
+    if directory != '.':
+        os.chdir(directory)
     if os.path.isdir("out"):
         listdir = os.listdir("out")
         if listdir != []:
@@ -19,9 +22,12 @@ def echo():
         click.echo("No tags available")
 
 @cli.command()
-@click.option("-c", "--config", default="config.yaml", help="Config yaml file path.", type=click.Path(exists=True))
-@click.option("--dry-run", is_flag=True, help="Just check the validity of the config.")
-def update(config, dry_run):
+@click.option("-c", "--config", default="config.yaml", help="Config yaml file path", type=click.Path(exists=True))
+@click.option("-d", "--directory", default=".", help="Path to the working directory", type=click.Path(exists=True))
+@click.option("--dry-run", is_flag=True, help="Just check the validity of the config")
+def update(config, directory, dry_run):
+    if directory != '.':
+        os.chdir(directory)
     config_file = yaml.full_load(open(config, "r"))
     is_valid(config_file)
     if dry_run:
