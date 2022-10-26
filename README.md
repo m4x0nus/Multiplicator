@@ -6,9 +6,9 @@ The classic usecase is to build a dozen of Dockerfiles for the different version
 ## TL;DR - a working sample
 File structure:
 ```
-skeletons/php/Dockerfile.template
-main.py
-config.yaml
+┌skeletons/php/Dockerfile.template
+├main.py
+└config.yaml
 ```
 
 
@@ -61,11 +61,11 @@ RUN pecl install xdebug-{{XDEBUG_VERSION}} && docker-php-ext-enable xdebug
 
 Now you are ready to run `python3 main.py update` to get 4 different Dockerfiles:
 ```
-out/
-    php-8.0/Dockerfile
-    php-8.0-with-xdebug/Dockerfile
-    php-8.1/Dockerfile
-    php-8.1-with-xdebug/Dockerfile
+out
+├ php-8.0/Dockerfile
+├ php-8.0-with-xdebug/Dockerfile
+├ php-8.1/Dockerfile
+└ php-8.1-with-xdebug/Dockerfile
 ```
 
 Need more variations?
@@ -87,10 +87,12 @@ python3 main.py update
 It takes no arguments as by default it uses **config.yaml** from the current directory as a config file.
 
 But the `update` command still has some aux options that are listed below:
-```
--c, --config PATH  Config yaml file path.
---dry-run          Just check the validity of the config.
-```
+
+| Short | Long        | Parameter | Description                           |
+| ----- | ----------- | --------- | ------------------------------------- |
+| -c    | --config    | PATH      | Config yaml file path                 |
+| -d    | --directory | PATH      | Working directory path                |
+|       | --dry-run   |           | Just check the validity of the config |
 
 
 
@@ -188,6 +190,12 @@ In case you need to save the generated directory after the respective section wa
 No tags available
 >
 ```
+
+`print` command has the following aux options:
+
+| Short | Long        | Parameter | Description                           |
+| ----- | ----------- | --------- | ------------------------------------- |
+| -d    | --directory | PATH      | Working directory path                |
 
 ## License
 This work is provided under the MIT License. See the included LICENSE file.
